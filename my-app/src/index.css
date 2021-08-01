@@ -1,0 +1,16 @@
+body { 
+  background-color: #223500;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#quote-box {
+  background-color: white;
+  color: #123333;
+  padding: 10px;
+  width: 600px;
+}
+
