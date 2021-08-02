@@ -18,7 +18,17 @@ const authors = [
   'Henry Wadsworth Longfellow'
 ];
 
+const colors = [
+  "#1A181B",
+  "#564D65",
+  "#3E8989",
+  "#2E282A",
+  "#EF3E36"
+
+]
+
 const initialIndex = Math.floor(Math.random() * 5);
+
 
 class App extends React.Component {
   constructor(props) {
@@ -26,38 +36,64 @@ class App extends React.Component {
     this.state = {
       currentQuote: quotes[initialIndex],
       currentAuthor: authors[initialIndex],
-      currentIndex: 0
+      currentIndex: initialIndex
     };
     this.generateQuote = this.generateQuote.bind(this);
+    this.generateNewIndex = this.generateNewIndex.bind(this);
+  }
+
+  generateNewIndex(previousIndex) {
+    let newNumber = previousIndex;
+    while(previousIndex === newNumber)
+    {
+      newNumber = Math.floor(Math.random() * 5)
+    }
+    return newNumber;
   }
 
   generateQuote() {
     this.setState({
-      currentIndex: Math.floor(Math.random() * 5),
+      currentIndex: this.generateNewIndex(this.state.currentIndex),
       currentQuote: quotes[this.state.currentIndex],
       currentAuthor: authors[this.state.currentIndex]
+    }, () => {
+      document.body.style.backgroundColor = colors[this.state.currentIndex]
+      document.getElementById("quote-box").style.color = colors[this.state.currentIndex];
     });
   }
 
+  componentDidMount = () => {
+    document.body.style.backgroundColor = colors[initialIndex];
+    document.getElementById("quote-box").style.color = colors[initialIndex];
+  }
+  
   render() {
 
     return (
       <div id="quote-box">
-        <div id="text">
-          <h1 class="text-center">
-            {this.state.currentQuote}
-          </h1>
-          <div class="text-center" id="author">
-            {this.state.currentAuthor}
+        <div id="text" class="text-center">
+            <i class="fa fa-quote-left" aria-hidden="true"></i> {this.state.currentQuote} <i class="fa fa-quote-right" aria-hidden="true"></i>
+        </div>
+        <div class="row">
+          <span class="col-sm-7"/>
+          <div class="col-sm-5" id="author">
+            - {this.state.currentAuthor}
           </div>
-          <button id="new-quote" onClick={this.generateQuote}>
+        </div>
+        <br/>
+        <div class="row">
+          <span class="col-sm-1"/>
+          <button id="new-quote" class="btn btn-primary col-sm-3" onClick={this.generateQuote}>
             New Quote
           </button>
-          <a id="tweet-quote" href={`https://twitter.com/intent/tweet?text=${this.state.currentQuote} - ${this.state.currentAuthor}`} >Tweet this</a>
+          <span class="col-sm-4"/>
+          <a id="tweet-quote" class="btn btn-primary col-sm-3" href={`https://twitter.com/intent/tweet?text=${this.state.currentQuote} - ${this.state.currentAuthor}`} ><i class="fab fa-twitter"/>Tweet this</a>
         </div>
       </div>
     );
   }
 };
+
+
 
 ReactDOM.render(<App/>, document.getElementById('wrapper'));
